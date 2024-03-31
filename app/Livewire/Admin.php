@@ -16,6 +16,8 @@ class Admin extends Component
     public $select_all_checkbox = false;
     public $holidays = [];
     public $events = [];
+    public $selected_count;
+    public $single_id;
 
     public function mount(): void
     {
@@ -27,9 +29,16 @@ class Admin extends Component
         $this->select_all_checkbox = false;
     }
 
-    public function confirm(): void
+    public function open_confirm($id): void
     {
-        $this->is_open = !$this->is_open;
+        $this->is_open = true;
+        $this->selected_count = count($this->selected);
+        $this->single_id = $id;
+    }
+
+    public function close_confirm(): void
+    {
+        $this->is_open = false;
     }
 
     public function toggle_select_all(): void
@@ -47,11 +56,11 @@ class Admin extends Component
         }
     }
 
-    public function delete_event($id): void
+    public function delete_event(): void
     {
         if (empty($this->selected))
         {
-            EventModel::destroy($id);
+            EventModel::destroy($this->single_id);
         }
         EventModel::destroy(array_values($this->selected));
         $this->selected = [];
