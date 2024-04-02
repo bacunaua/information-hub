@@ -9,9 +9,9 @@
             <div class="grow text-center">
                 Manage Events
             </div>
-            <div>
-                <button type=""
-                    class="text-slate-200 border-2 border-green-500
+            <div class="flex justify-center items-center">
+                <button wire:click="open_add_event"
+                    class="p-1 text-slate-200 border-2 border-green-500
                     rounded-full px-3 text-sm hover:bg-green-400 transition
                     delay-50 ease-out hover:text-slate-800"
                 >
@@ -99,20 +99,19 @@
                 </tbody>
             </table>
         </div>
-        @if($is_open)
-        <div
-            wire:click="close_confirm"
+        @if($is_confirmation_open)
+        <div wire:click="close_confirm"
             class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
             z-20 flex justify-center items-center">
                 <div class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
                     bg-slate-800 shadow-2xl p-4 flex flex-col items-center
-                    justify-center">
+                    justify-center md:w-2/3">
                     <div class="m-1 p-4 font-bold sm:text-3xl">
-                    @if($selected_count == 0)
+                    @if($selected_count < 2)
                         {{ 'Are you sure you want to delete this event?' }}
                     @else
-                        {{ "Delete $selected_count " . 'selected '
-                        . ($selected_count == 1 ? 'item' : 'items') . "?" }}
+                        {{ "Deleting $selected_count selected events.
+                        Are you sure?" }}
                     @endif
                     </div>
                     <div class="flex flex-col sm:flex-row items-center
@@ -134,6 +133,37 @@
                         </div>
                     </div>
                 </div>
+        </div>
+        @endif
+        @if($is_add_event_open)
+        <div wire:click="close_add_event"
+            class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
+            z-20 flex justify-center items-center">
+            <div class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
+                bg-slate-800 shadow-2xl p-4 flex flex-col items-center
+                justify-center md:w-2/3">
+                <div>
+                    Form
+                </div>
+                <div class="flex flex-col sm:flex-row items-center
+                    justify-around min-w-full">
+                    <div class="font-black text-sm rounded-full border-2
+                        border-green-600 p-2 my-2 max-w-72 min-w-32
+                        transition ease-out delay-50 hover:bg-green-600
+                        hover:text-slate-800 cursor-pointer
+                        sm:text-xl">
+                        Add Event
+                    </div>
+                    <div wire:click="close_add_event"
+                        class="font-black text-sm rounded-full border-2
+                        border-red-600 p-2 my-2 max-w-72 min-w-32
+                        transition ease-out delay-50 hover:bg-red-600
+                        hover:text-slate-800 cursor-pointer
+                        sm:text-xl">
+                        Cancel
+                    </div>
+                </div>
+            </div>
         </div>
         @endif
     </div>

@@ -11,7 +11,8 @@ class Admin extends Component
 {
     use WithPagination;
 
-    public $is_open = false;
+    public $is_confirmation_open = false;
+    public $is_add_event_open = false;
     public $selected = [];
     public $select_all_checkbox = false;
     public $holidays = [];
@@ -29,16 +30,26 @@ class Admin extends Component
         $this->select_all_checkbox = false;
     }
 
+    public function open_add_event(): void
+    {
+        $this->is_add_event_open = true;
+    }
+
     public function open_confirm($id): void
     {
-        $this->is_open = true;
+        $this->is_confirmation_open = true;
         $this->selected_count = count($this->selected);
         $this->single_id = $id;
     }
 
+    public function close_add_event(): void
+    {
+        $this->is_add_event_open = false;
+    }
+
     public function close_confirm(): void
     {
-        $this->is_open = false;
+        $this->is_confirmation_open = false;
     }
 
     public function toggle_select_all(): void

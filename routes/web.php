@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin;
+use App\Livewire\AdminAddEvent;
 use App\Livewire\Events;
 use App\Livewire\Holidays;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ Route::view('/admin', 'adminpage');
 Route::get('/events', Events::class);
 Route::get('/holidays', Holidays::class);
 Route::get('/admin_class', Admin::class);
+Route::get('/admin_add_event',AdminAddEvent::class);
 
 
 Route::view('dashboard', 'dashboard')
