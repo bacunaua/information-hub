@@ -12,6 +12,7 @@ class EventModel extends Model
     protected $fillable = [
         'name',
         'date',
+        'time',
         'info',
         'location',
         'host',

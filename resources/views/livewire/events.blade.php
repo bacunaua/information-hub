@@ -54,7 +54,7 @@
                             stroke-linejoin="round"/>
                     </svg>
                     <div class="px-2">
-                        {{ $event['date'] }}
+                        {{ "{$event['date']} {$event['time']}" }}
                     </div>
                 </div>
                 <div>

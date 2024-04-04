@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\EventModel;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -21,17 +22,24 @@ class AdminAddEvent extends Component
     public $host;
     public $time;
     public $info;
+    public $success_popup = false;
 
     public function add(): void
     {
         $this->validate();
-
         EventModel::create([
             'name' => $this->name,
-            'date' => "{$this->date} {$this->time}",
+            'date' => $this->date,
+            'time' => $this->time,
             'location' => $this->location,
             'info' => $this->info,
         ]);
+        $this->success_popup = true;
+    }
+
+    public function close_popup(): void
+    {
+        $this->success_popup = false;
     }
 
     #[Title('Add Event')]

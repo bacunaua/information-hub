@@ -1,6 +1,8 @@
 @php
-    $inputs_style = 'p-1 mx-1 my-2 bg-slate-800 max-w-full grow';
-    $labels_style = 'flex justify-end items-center min-w-20 text-sm';
+    $inputs_style = 'p-1 ml-2 my-2 bg-slate-700 max-w-full grow
+    text-slate-100';
+    $labels_style = 'cursor-none flex justify-end items-center min-w-20 text-sm
+    text-slate-800';
     $form_inputs = [
         [
             'label_name' => 'Name',
@@ -41,45 +43,60 @@
 @endphp
 
 <div class="font['Montserrat'] min-w-screen min-h-screen bg-slate-800 flex
-    flex-col text-xl text-slate-100 text-center shadow-2xl">
+    flex-col text-center">
 
-    <div class="flex flex-col justify-center items-center grow min-h-screen">
-        <form wire:submit="add"
-            class="text-slate-100 font-bold flex flex-col grow justify-around
-            lg:w-1/2 bg-slate-700 px-2 sm:px-8">
-        <div class="py-4 text-3xl font-black sm:min-w-screen">
-            Add Event
+    <div class="flex flex-col justify-center items-center grow min-h-screen
+        shadow-2xl">
+        <div wire:click="close_popup"
+            class="absolute top-0 z-10 text-slate-100 bg-slate-800 p-4
+            shadow-2xl font-bold cursor-pointer
+            {{ $success_popup ? '' : 'hidden' }}">
+            Event added successfully. Click to close.
         </div>
+        <form wire:submit="add"
+            class="text-slate-800 font-bold flex flex-col grow justify-around
+            lg:w-1/2 bg-slate-300 px-2 sm:px-8">
+            <div class="py-4 text-3xl font-bold sm:min-w-screen">
+                Add Event
+            </div>
             <div class="flex flex-col max-w-full">
                 @foreach($form_inputs as $form_input)
                 <div class="min-w-full flex">
                     <label for="{{ $form_input['input_name'] }}"
-                        class="{{ $labels_style }}">
+                        class="{{ $labels_style }}
+                            @error($form_input['input_model'])
+                            {{ 'text-red-700' }}
+                            @enderror
+                        ">
                         {{ $form_input['label_name'] }}
                     </label>
                     <input type="{{ $form_input['input_type'] }}"
                         wire:model ="{{ $form_input['input_model'] }}"
                         name="" id="{{ $form_input['input_name'] }}" value=""
                         class="{{ $inputs_style }}">
-                    <div>
-                        @error($form_input['input_model'])
-                        {{ $message }}
-                        @enderror
-                    </div>
                 </div>
                 @endforeach
             </div>
+            <div class="px-2 text-red-700 text-left text-sm">
+            @foreach($form_inputs as $form_input)
+                @error($form_input['input_model'])
+                <div class="">
+                    {{ "*$message" }}
+                </div>
+                @enderror
+            @endforeach
+            </div>
             <div class="flex justify-around min-w-full py-4 text-slate-100">
                 <button type="submit"
-                    class="border-2 min-w-28 border-green-500 rounded-full font-bold
-                    transition ease-out delay-50 hover:bg-green-500
-                    hover:text-slate-800">
+                    class="min-w-28 bg-slate-700 rounded-full
+                    font-bold transition ease-out delay-50 hover:bg-slate-800
+                    text-slate-100 p-1">
                     Add
                 </button>
                 <button type="reset"
-                    class="border-2 min-w-28 border-red-500 rounded-full font-bold
-                    transition ease-out delay-50 hover:bg-red-500
-                    hover:text-slate-800">
+                    class="min-w-28 bg-slate-600 rounded-full font-bold
+                    transition ease-out delay-50 hover:bg-slate-700 p-1
+                    text-slate-100">
                     Clear
                 </button>
             </div>
