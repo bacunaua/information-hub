@@ -10,18 +10,22 @@ use Livewire\Component;
 
 class AdminAddEvent extends Component
 {
-    #[Validate('required', message: 'Please provide the name of this event')]
+    #[Validate('required',
+        message: 'Please provide the name of this event')]
     public $name;
 
-    #[Validate('required', message: 'Please provide the date of this event')]
+    #[Validate('required',
+        message: 'Please provide the date of this event')]
     public $date;
 
     #[Validate('required',
         message: 'Please provide the location of this event')]
     public $location;
-    public $host;
+
     public $time;
+
     public $info;
+    public $host;
     public $success_popup = false;
 
     public function add(): void

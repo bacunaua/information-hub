@@ -1,6 +1,6 @@
 @php
     $inputs_style = 'p-1 ml-2 my-2 bg-slate-700 max-w-full grow
-    text-slate-100';
+    text-slate-100 text-sm';
     $labels_style = 'cursor-none flex justify-end items-center min-w-20 text-sm
     text-slate-800';
     $form_inputs = [
@@ -26,8 +26,7 @@
             'input_name' => 'date',
             'input_type' => 'date',
             'input_model' => 'date',
-        ],
-        [
+        ], [
             'label_name' => 'Start time',
             'input_name' => 'time',
             'input_type' => 'time',
@@ -42,7 +41,7 @@
     ];
 @endphp
 
-<div class="font['Montserrat'] min-w-screen min-h-screen bg-slate-800 flex
+<div class="font['Montserrat'] min-w-screen min-h-screen bg-slate-500 flex
     flex-col text-center">
 
     <div class="flex flex-col justify-center items-center grow min-h-screen
@@ -86,7 +85,8 @@
                 @enderror
             @endforeach
             </div>
-            <div class="flex justify-around min-w-full py-4 text-slate-100">
+            <div class="flex justify-around min-w-full py-4 text-slate-100
+                flex-col lg:flex-row gap-4">
                 <button type="submit"
                     class="min-w-28 bg-slate-700 rounded-full
                     font-bold transition ease-out delay-50 hover:bg-slate-800
@@ -95,10 +95,16 @@
                 </button>
                 <button type="reset"
                     class="min-w-28 bg-slate-600 rounded-full font-bold
-                    transition ease-out delay-50 hover:bg-slate-700 p-1
+                    transition ease-out delay-50 hover:bg-slate-800 p-1
                     text-slate-100">
                     Clear
                 </button>
+                <a href="/admin" wire:navigate
+                    class="min-w-28 bg-zinc-600 rounded-full
+                    font-bold transition ease-out delay-50 hover:bg-slate-800
+                    text-slate-100 p-1">
+                    View Events
+                </a>
             </div>
         </form>
     </div>

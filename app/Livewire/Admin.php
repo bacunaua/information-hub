@@ -13,12 +13,15 @@ class Admin extends Component
 
     public $is_confirmation_open = false;
     public $is_add_event_open = false;
+    public $is_edit_event_open = false;
     public $selected = [];
     public $select_all_checkbox = false;
     public $holidays = [];
     public $events = [];
-    public $selected_count;
+    public $events_to_update = [];
+    public $selected_count = 0;
     public $single_id;
+    public $key;
 
     public function mount(): void
     {
@@ -28,6 +31,11 @@ class Admin extends Component
     public function check_select_all(): void
     {
         $this->select_all_checkbox = false;
+    }
+
+    public function open_edit_event(): void
+    {
+        $this->is_edit_event_open = true;
     }
 
     public function open_add_event(): void
@@ -40,6 +48,11 @@ class Admin extends Component
         $this->is_confirmation_open = true;
         $this->selected_count = count($this->selected);
         $this->single_id = $id;
+    }
+
+    public function close_edit_event(): void
+    {
+        $this->is_edit_event_open = false;
     }
 
     public function close_add_event(): void
@@ -65,14 +78,11 @@ class Admin extends Component
                 $this->selected = [];
             }
         }
+        $this->selected_count = count($this->selected);
     }
 
     public function delete_event(): void
     {
-        if (empty($this->selected))
-        {
-            EventModel::destroy($this->single_id);
-        }
         EventModel::destroy(array_values($this->selected));
         $this->selected = [];
         $this->fetch_events();
@@ -82,8 +92,15 @@ class Admin extends Component
     {
     }
 
-    public function update_event(): void
+    public function update_event($id): void
     {
+        if (empty($this->selected))
+        {
+            $this->selected[] = $id;
+        }
+        $this->events_to_update = EventModel::whereIn('id',
+                                        $this->selected)->get();
+        $this->open_edit_event();
     }
 
     public function update_holiday(): void

@@ -1,5 +1,8 @@
 @php
-    $headers = ['Name', 'Date']
+    $headers = ['Name', 'Date'];
+    $updatable_cols = ['Name' => 'name',
+        'Location' => 'location',
+        'Host' => 'host']
 @endphp
 <div class="max-h-screen bg-slate-800 flex justify-center font['Montserrat']">
     <div class="flex flex-col justify-center text-center text-slate-100
@@ -9,15 +12,29 @@
             <div class="grow text-center">
                 Manage Events
             </div>
-            <div class="flex justify-center items-center">
-                <button wire:click="open_add_event"
-                    class="p-1 text-slate-200 border-2 border-green-500
-                    rounded-full px-3 text-sm hover:bg-green-400 transition
-                    delay-50 ease-out hover:text-slate-800"
-                >
-                    Add Event
-                </button>
-            </div>
+        </div>
+        <div class="pb-4 flex flex-col gap-4 justify-center items-center">
+            <a wire:navigate href="/admin_add_event"
+                class="p-1 text-slate-200 border-2 border-green-500
+                rounded-full px-3 text-sm hover:bg-green-400 transition
+                delay-50 ease-out hover:text-slate-800"
+            >
+                Add Event
+            </a>
+            <button
+                class="p-1 text-slate-200 border-2 border-green-500
+                rounded-full px-3 text-sm hover:bg-green-400 transition
+                delay-50 ease-out hover:text-slate-800">
+                Delete {{ count($selected) }}
+                {{ $selected_count == 1 ? 'item' : 'items' }} selected
+            </button>
+            <button
+                class="p-1 text-slate-200 border-2 border-green-500
+                rounded-full px-3 text-sm hover:bg-green-400 transition
+                delay-50 ease-out hover:text-slate-800">
+                Update {{ count($selected) }}
+                {{ $selected_count == 1 ? 'item' : 'items' }} selected
+            </button>
         </div>
         <div class="basis-5/6 overflow-scroll text-xs sm:text-base font['Montserrat']">
             <table class="min-w-full cursor-default border-spacing-0
@@ -43,7 +60,7 @@
                 </thead>
 
                 <tbody>
-                @foreach($events as $event)
+                @foreach($events as $index => $event)
                 <tr class="">
                     <td class="border-b-2 border-slate-500 align-middle">
                         <input type="checkbox"
@@ -155,6 +172,60 @@
                         Add Event
                     </div>
                     <div wire:click="close_add_event"
+                        class="font-black text-sm rounded-full border-2
+                        border-red-600 p-2 my-2 max-w-72 min-w-32
+                        transition ease-out delay-50 hover:bg-red-600
+                        hover:text-slate-800 cursor-pointer
+                        sm:text-xl">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+        @if($is_edit_event_open)
+        <div wire:click=""
+            class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
+            z-20 flex justify-center items-center">
+            <div wire:click=""
+                class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
+                bg-slate-800 shadow-2xl p-4 flex flex-col items-center
+                justify-center md:w-2/3">
+                <div class="text-2xl font-black">
+                    Edit
+                </div>
+                <div class="font-bold max-h-40 overflow-scroll">
+                    @foreach($events_to_update as $event)
+                    <form class="">
+                        <div class="">
+                            ID: {{ $event['id']  }}
+                        </div>
+                        @foreach($updatable_cols as $col_name => $col_var)
+                        <div class="flex items-center text-middle">
+                            <label for="{{ $col_var . $event['id'] }}">
+                                {{ $col_name }}
+                            </label>
+                            <input type="text" name=""
+                                id="{{ $col_var . $event['id'] }}"
+                                value="{{ $event[$col_var] }}"
+                                class="bg-slate-700 text-slate-100 grow w-1/6
+                                    ml-2 mb-2">
+                        </div>
+                        @endforeach
+                    </form>
+                    @endforeach
+                </div>
+                <div class="flex flex-col sm:flex-row items-center
+                    justify-around min-w-full">
+                    <div wire:click
+                        class="font-black text-sm rounded-full border-2
+                        border-green-600 p-2 my-2 max-w-72 min-w-32
+                        transition ease-out delay-50 hover:bg-green-600
+                        hover:text-slate-800 cursor-pointer
+                        sm:text-xl">
+                        Update
+                    </div>
+                    <div wire:click="close_edit_event"
                         class="font-black text-sm rounded-full border-2
                         border-red-600 p-2 my-2 max-w-72 min-w-32
                         transition ease-out delay-50 hover:bg-red-600

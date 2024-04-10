@@ -1,0 +1,4 @@
+- Null input in time should be handled
+(display should say "No specific time specified" or something like that)
+
+- Clicking a row in admin should display all of the columns as additional info
