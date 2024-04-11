@@ -19,9 +19,9 @@ class Admin extends Component
     public $holidays = [];
     public $events = [];
     public $events_to_update = [];
-    public $selected_count = 0;
-    public $single_id;
+    public $individual_id;
     public $key;
+    public $single_event_for_deletion;
 
     public function mount(): void
     {
@@ -30,7 +30,14 @@ class Admin extends Component
 
     public function check_select_all(): void
     {
-        $this->select_all_checkbox = false;
+        if (count($this->selected) < count($this->events))
+        {
+            $this->select_all_checkbox = false;
+        }
+        else
+        {
+            $this->select_all_checkbox = true;
+        }
     }
 
     public function open_edit_event(): void
@@ -43,11 +50,14 @@ class Admin extends Component
         $this->is_add_event_open = true;
     }
 
-    public function open_confirm($id): void
+    public function open_delete_event_confirmation($id): void
     {
+        if ($id)
+        {
+            $this->single_event_for_deletion = EventModel::find($id);
+            $this->individual_id = $id;
+        }
         $this->is_confirmation_open = true;
-        $this->selected_count = count($this->selected);
-        $this->single_id = $id;
     }
 
     public function close_edit_event(): void
@@ -78,10 +88,15 @@ class Admin extends Component
                 $this->selected = [];
             }
         }
-        $this->selected_count = count($this->selected);
     }
 
     public function delete_event(): void
+    {
+        EventModel::destroy($this->individual_id);
+        $this->fetch_events();
+    }
+
+    public function delete_event_selected(): void
     {
         EventModel::destroy(array_values($this->selected));
         $this->selected = [];

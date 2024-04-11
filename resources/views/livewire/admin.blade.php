@@ -13,7 +13,8 @@
                 Manage Events
             </div>
         </div>
-        <div class="pb-4 flex flex-col gap-4 justify-center items-center">
+        <div class="pb-4 flex flex-col sm:flex-row gap-4 justify-center
+            items-center">
             <a wire:navigate href="/admin_add_event"
                 class="p-1 text-slate-200 border-2 border-green-500
                 rounded-full px-3 text-sm hover:bg-green-400 transition
@@ -26,14 +27,14 @@
                 rounded-full px-3 text-sm hover:bg-green-400 transition
                 delay-50 ease-out hover:text-slate-800">
                 Delete {{ count($selected) }}
-                {{ $selected_count == 1 ? 'item' : 'items' }} selected
+                {{ count($selected) == 1 ? 'item' : 'items' }} selected
             </button>
             <button
                 class="p-1 text-slate-200 border-2 border-green-500
                 rounded-full px-3 text-sm hover:bg-green-400 transition
                 delay-50 ease-out hover:text-slate-800">
                 Update {{ count($selected) }}
-                {{ $selected_count == 1 ? 'item' : 'items' }} selected
+                {{ count($selected) == 1 ? 'item' : 'items' }} selected
             </button>
         </div>
         <div class="basis-5/6 overflow-scroll text-xs sm:text-base font['Montserrat']">
@@ -101,7 +102,8 @@
                         </div>
                     </td>
                     <td class="border-b-2 border-slate-500 px-1 py-2">
-                        <div wire:click="open_confirm({{ $event['id'] }})"
+                        <div wire:click="open_delete_event_confirmation(
+                            {{ $event['id'] }})"
                             class="cursor-pointer size-4 stroke-4 fill-red-600
                             hover:fill-red-400 m-auto transition delay-50
                             ease-out">
@@ -122,14 +124,10 @@
             z-20 flex justify-center items-center">
                 <div class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
                     bg-slate-800 shadow-2xl p-4 flex flex-col items-center
-                    justify-center md:w-2/3">
-                    <div class="m-1 p-4 font-bold sm:text-3xl">
-                    @if($selected_count < 2)
-                        {{ 'Are you sure you want to delete this event?' }}
-                    @else
-                        {{ "Deleting $selected_count selected events.
-                        Are you sure?" }}
-                    @endif
+                    justify-center md:w-2/3 z-40">
+                    <div class="m-1 cursor-default p-4 font-bold sm:text-3xl">
+                        Deleting "{{ $single_event_for_deletion['name'] }}".
+                        Are you sure?
                     </div>
                     <div class="flex flex-col sm:flex-row items-center
                         justify-around min-w-full">
@@ -184,11 +182,9 @@
         </div>
         @endif
         @if($is_edit_event_open)
-        <div wire:click=""
-            class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
+        <div class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
             z-20 flex justify-center items-center">
-            <div wire:click=""
-                class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
+            <div class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
                 bg-slate-800 shadow-2xl p-4 flex flex-col items-center
                 justify-center md:w-2/3">
                 <div class="text-2xl font-black">
