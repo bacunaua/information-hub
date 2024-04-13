@@ -22,14 +22,14 @@
             >
                 Add Event
             </a>
-            <button
+            <button wire:click="delete_event_selected"
                 class="p-1 text-slate-200 border-2 border-green-500
                 rounded-full px-3 text-sm hover:bg-green-400 transition
                 delay-50 ease-out hover:text-slate-800">
                 Delete {{ count($selected) }}
                 {{ count($selected) == 1 ? 'item' : 'items' }} selected
             </button>
-            <button
+            <button wire:click="update_event_selected"
                 class="p-1 text-slate-200 border-2 border-green-500
                 rounded-full px-3 text-sm hover:bg-green-400 transition
                 delay-50 ease-out hover:text-slate-800">
@@ -102,8 +102,7 @@
                         </div>
                     </td>
                     <td class="border-b-2 border-slate-500 px-1 py-2">
-                        <div wire:click="open_delete_event_confirmation(
-                            {{ $event['id'] }})"
+                        <div wire:click="open_delete_event_confirmation({{$event['id']}})"
                             class="cursor-pointer size-4 stroke-4 fill-red-600
                             hover:fill-red-400 m-auto transition delay-50
                             ease-out">
@@ -150,37 +149,6 @@
                 </div>
         </div>
         @endif
-        @if($is_add_event_open)
-        <div wire:click="close_add_event"
-            class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
-            z-20 flex justify-center items-center">
-            <div class="opacity-100 rounded-xl h-auto w-4/5 sm:w-3/4
-                bg-slate-800 shadow-2xl p-4 flex flex-col items-center
-                justify-center md:w-2/3">
-                <div>
-                    Form
-                </div>
-                <div class="flex flex-col sm:flex-row items-center
-                    justify-around min-w-full">
-                    <div class="font-black text-sm rounded-full border-2
-                        border-green-600 p-2 my-2 max-w-72 min-w-32
-                        transition ease-out delay-50 hover:bg-green-600
-                        hover:text-slate-800 cursor-pointer
-                        sm:text-xl">
-                        Add Event
-                    </div>
-                    <div wire:click="close_add_event"
-                        class="font-black text-sm rounded-full border-2
-                        border-red-600 p-2 my-2 max-w-72 min-w-32
-                        transition ease-out delay-50 hover:bg-red-600
-                        hover:text-slate-800 cursor-pointer
-                        sm:text-xl">
-                        Cancel
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
         @if($is_edit_event_open)
         <div class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
             z-20 flex justify-center items-center">
@@ -190,11 +158,11 @@
                 <div class="text-2xl font-black">
                     Edit
                 </div>
-                <div class="font-bold max-h-40 overflow-scroll">
-                    @foreach($events_to_update as $event)
+                <div class="font-bold min-w-full max-h-40 overflow-scroll">
+                    @foreach($events_for_update as $event)
                     <form class="">
                         <div class="">
-                            ID: {{ $event['id']  }}
+                            ID: {{ $event['id'] }}
                         </div>
                         @foreach($updatable_cols as $col_name => $col_var)
                         <div class="flex items-center text-middle">

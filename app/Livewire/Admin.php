@@ -12,7 +12,6 @@ class Admin extends Component
     use WithPagination;
 
     public $is_confirmation_open = false;
-    public $is_add_event_open = false;
     public $is_edit_event_open = false;
     public $selected = [];
     public $select_all_checkbox = false;
@@ -22,6 +21,7 @@ class Admin extends Component
     public $individual_id;
     public $key;
     public $single_event_for_deletion;
+    public $events_for_update;
 
     public function mount(): void
     {
@@ -45,29 +45,18 @@ class Admin extends Component
         $this->is_edit_event_open = true;
     }
 
-    public function open_add_event(): void
-    {
-        $this->is_add_event_open = true;
-    }
 
     public function open_delete_event_confirmation($id): void
     {
-        if ($id)
-        {
-            $this->single_event_for_deletion = EventModel::find($id);
-            $this->individual_id = $id;
-        }
+        $this->single_event_for_deletion = EventModel::find($id);
+        $this->individual_id = $id;
         $this->is_confirmation_open = true;
     }
 
     public function close_edit_event(): void
     {
+        $this->events_for_update = [];
         $this->is_edit_event_open = false;
-    }
-
-    public function close_add_event(): void
-    {
-        $this->is_add_event_open = false;
     }
 
     public function close_confirm(): void
@@ -93,12 +82,15 @@ class Admin extends Component
     public function delete_event(): void
     {
         EventModel::destroy($this->individual_id);
+        $this->single_event_for_deletion = null;
+        $this->selected = [];
         $this->fetch_events();
     }
 
     public function delete_event_selected(): void
     {
         EventModel::destroy(array_values($this->selected));
+        $this->select_all_checkbox = false;
         $this->selected = [];
         $this->fetch_events();
     }
@@ -107,14 +99,16 @@ class Admin extends Component
     {
     }
 
+    public function update_event_selected(): void
+    {
+        $this->events_for_update = EventModel::whereIn('id', $this->selected)
+                                        ->get();
+        $this->open_edit_event();
+    }
+
     public function update_event($id): void
     {
-        if (empty($this->selected))
-        {
-            $this->selected[] = $id;
-        }
-        $this->events_to_update = EventModel::whereIn('id',
-                                        $this->selected)->get();
+        $this->events_for_update[] = EventModel::find($id);
         $this->open_edit_event();
     }
 
