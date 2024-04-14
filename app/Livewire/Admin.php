@@ -21,7 +21,7 @@ class Admin extends Component
     public $individual_id;
     public $key;
     public $single_event_for_deletion;
-    public $events_for_update;
+    public $events_selected;
 
     public function mount(): void
     {
@@ -45,23 +45,34 @@ class Admin extends Component
         $this->is_edit_event_open = true;
     }
 
-
-    public function open_delete_event_confirmation($id): void
+    public function open_delete_event_confirmation(...$ids): void
     {
-        $this->single_event_for_deletion = EventModel::find($id);
-        $this->individual_id = $id;
-        $this->is_confirmation_open = true;
+        foreach($ids as $id)
+        {
+            if(isset($id))
+            {
+                $this->selected = [$id];
+            }
+        }
+        if(count($this->selected) > 0)
+        {
+            $this->events_selected = EventModel::whereIn('id', $this->selected)
+                                        ->get();
+            $this->is_confirmation_open = true;
+        }
     }
 
     public function close_edit_event(): void
     {
-        $this->events_for_update = [];
+        $this->events_selected = [];
         $this->is_edit_event_open = false;
     }
 
     public function close_confirm(): void
     {
         $this->is_confirmation_open = false;
+        $this->selected = [];
+        $this->check_select_all();
     }
 
     public function toggle_select_all(): void
@@ -79,20 +90,13 @@ class Admin extends Component
         }
     }
 
-    public function delete_event(): void
-    {
-        EventModel::destroy($this->individual_id);
-        $this->single_event_for_deletion = null;
-        $this->selected = [];
-        $this->fetch_events();
-    }
-
     public function delete_event_selected(): void
     {
         EventModel::destroy(array_values($this->selected));
-        $this->select_all_checkbox = false;
         $this->selected = [];
         $this->fetch_events();
+        $this->check_select_all();
+        $this->is_confirmation_open = false;
     }
 
     public function delete_holiday(): void
@@ -101,14 +105,18 @@ class Admin extends Component
 
     public function update_event_selected(): void
     {
-        $this->events_for_update = EventModel::whereIn('id', $this->selected)
+        if (empty($this->selected))
+        {
+            return;
+        }
+        $this->events_selected = EventModel::whereIn('id', $this->selected)
                                         ->get();
         $this->open_edit_event();
     }
 
     public function update_event($id): void
     {
-        $this->events_for_update[] = EventModel::find($id);
+        $this->events_selected[] = EventModel::find($id);
         $this->open_edit_event();
     }
 
