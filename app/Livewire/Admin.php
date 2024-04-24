@@ -17,11 +17,14 @@ class Admin extends Component
     public $select_all_checkbox = false;
     public $holidays = [];
     public $events = [];
-    public $events_to_update = [];
     public $individual_id;
     public $key;
     public $single_event_for_deletion;
     public $events_selected;
+    public $new_events = [];
+    public $name;
+    public $location;
+    public $host;
 
     public function mount(): void
     {
@@ -62,6 +65,34 @@ class Admin extends Component
         }
     }
 
+    public function open_update_event_confirmation(...$ids): void
+    {
+        foreach($ids as $id)
+        {
+            if(isset($id))
+            {
+                $this->selected = [$id];
+            }
+        }
+        if(count($this->selected) > 0)
+        {
+            $this->events_selected = EventModel::whereIn('id', $this->selected)
+                                        ->get();
+            $this->is_confirmation_open = true;
+        }
+    }
+
+    public function confirm_update($id): void
+    {
+        $event = EventModel::find($id);
+        $event->name = $this->name;
+        $event->location = $this->location;
+        $event->host = $this->host;
+        $event->save();
+        $this->fetch_events();
+        $this->close_edit_event();
+    }
+
     public function close_edit_event(): void
     {
         $this->events_selected = [];
@@ -72,6 +103,7 @@ class Admin extends Component
     {
         $this->is_confirmation_open = false;
         $this->selected = [];
+        $this->events_selected = [];
         $this->check_select_all();
     }
 

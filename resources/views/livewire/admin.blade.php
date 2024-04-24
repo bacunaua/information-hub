@@ -61,7 +61,7 @@
 
                 <tbody>
                 @foreach($events as $index => $event)
-                <tr class="odd:bg-slate-900 even:bg-slate-850">
+                <tr class="hover:bg-slate-700 odd:bg-slate-900 even:bg-slate-850">
                     <td class="border-b-2 border-slate-500 align-middle">
                         <input type="checkbox"
                             value="{{ $event['id'] }}"
@@ -74,7 +74,8 @@
                     <td class="border-b-2 border-slate-500 px-1 py-2">
                         {{ $event['date'] }}</td>
                     <td class="border-b-2 border-slate-500 px-1 py-2">
-                        <div wire:click="update_event({{ $event['id'] }})"
+                        <div wire:click.debounce.500ms="update_event(
+                            {{ $event['id'] }})"
                             class="cursor-pointer size-4 stroke-2
                             stroke-green-500 hover:stroke-green-300 m-auto
                             transition ease-out delay-50">
@@ -118,10 +119,24 @@
         </div>
         @if($is_confirmation_open)
         <div class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
-            z-20 flex justify-center items-center">
+            z-40 flex justify-center items-center">
             <div class="opacity-100 rounded-xl h-auto w-[95%]
                 bg-slate-800 shadow-2xl p-4 flex flex-col items-center
-                justify-center z-40 max-h-[90%]">
+                justify-center z-100 max-h-[90%]">
+                <div class="flex align-middle w-full">
+                    <div class="text-2xl font-black p-1 grow">
+                        Delete
+                    </div>
+                    <div wire:click="close_confirm"
+                        class="fill-slate-950 p-1 bg-red-500 hover:bg-red-600
+                        rounded-full cursor-pointer size-8 justify-center
+                        items-center">
+                        <svg viewBox="0 0 1024 1024"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"/>
+                        </svg>
+                    </div>
+                </div>
                 <div class="cursor-default p-4 font-bold">
                     Deleting the following events:
                 </div>
@@ -160,12 +175,23 @@
             <div class="opacity-100 rounded-xl h-auto max-h-[90%] w-[95%]
                 bg-slate-800 shadow-2xl p-4 flex flex-col items-center
                 justify-between gap-4">
-                <div class="text-2xl font-black p-1">
-                    Edit
+                <div class="flex align-middle w-full">
+                    <div class="text-2xl font-black p-1 grow">
+                        Edit
+                    </div>
+                    <div wire:click="close_edit_event"
+                        class="fill-slate-950 p-1 bg-red-500 hover:bg-red-600
+                        rounded-full cursor-pointer size-8 justify-center
+                        items-center">
+                        <svg viewBox="0 0 1024 1024"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"/>
+                        </svg>
+                    </div>
                 </div>
                 <div class="font-bold min-w-full overflow-scroll">
                     @foreach($events_selected as $event)
-                    <form class="">
+                    <form wire:submit="confirm_update({{ $event['id'] }})">
                         <div class="text-lg pb-2">
                             ID: {{ $event['id'] }}
                         </div>
@@ -179,32 +205,33 @@
                                 <input type="text" name=""
                                     id="{{ $col_var . $event['id'] }}"
                                     value="{{ $event[$col_var] }}"
+                                    wire:model="{{ $col_var }}"
                                     class="bg-slate-700 text-slate-100 grow
                                         w-1/6 mx-2 p-1">
                             </div>
                             @endforeach
                         </div>
+                        <div class="flex flex-col sm:flex-row items-center
+                            justify-around min-w-full">
+                            <button type="submit"
+                                class="font-black text-sm rounded-full border-2
+                                border-green-600 p-1 my-2 max-w-72 min-w-32
+                                transition ease-out delay-50 hover:bg-green-600
+                                hover:text-slate-950 cursor-pointer
+                                md:text-xl">
+                                Update
+                            </button>
+                            <button type="reset"
+                                class="font-black text-sm rounded-full border-2
+                                border-blue-500 p-1 my-2 max-w-72 min-w-32
+                                transition ease-out delay-50 hover:bg-blue-500
+                                hover:text-slate-950 cursor-pointer
+                                md:text-xl">
+                                Reset
+                            </button>
+                        </div>
                     </form>
                     @endforeach
-                </div>
-                <div class="flex flex-col sm:flex-row items-center
-                    justify-around min-w-full">
-                    <div wire:click
-                        class="font-black text-sm rounded-full border-2
-                        border-green-600 p-1 my-2 max-w-72 min-w-32
-                        transition ease-out delay-50 hover:bg-green-600
-                        hover:text-slate-950 cursor-pointer
-                        md:text-xl">
-                        Update
-                    </div>
-                    <div wire:click="close_edit_event"
-                        class="font-black text-sm rounded-full border-2
-                        border-red-600 p-1 my-2 max-w-72 min-w-32
-                        transition ease-out delay-50 hover:bg-red-600
-                        hover:text-slate-950 cursor-pointer
-                        md:text-xl">
-                        Cancel
-                    </div>
                 </div>
             </div>
         </div>
