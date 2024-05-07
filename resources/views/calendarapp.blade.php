@@ -16,16 +16,11 @@
     </head>
     <body class="antialiased font-sans">
         <div class="flex flex-col xl:max-h-screen min-h-screen xl:flex-row">
-            <div class="grow flex flex-col">
+            <div class="grow flex overflow-scroll max-h-screen bg-slate-300">
                 <livewire:calendar />
             </div>
-            <div class="xl:grid xl:grid-rows-2 xl:basis-1/4">
-                <div class="overflow-scroll max-h-full">
-                    <livewire:events />
-                </div>
-                <div class="overflow-scroll max-h-full">
-                    <livewire:holidays />
-                </div>
+            <div class="xl:basis-1/4 overflow-scroll max-h-screen">
+                <livewire:events />
             </div>
         </div>
     </body>

@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div>
-                    {{ "Hosted by {$event['host']}" }}
+                    {{ 'Hosted by ' . ($event['host'] ?? 'N/A') }}
                 </div>
                 <div class="relative mx-2 mt-6 p-4 bg-slate-600">
                     <div class="bg-slate-800 p-2 shadow-2xl absolute -top-3
@@ -75,7 +75,7 @@
                             stroke-width="1.5" x1="12" x2="12" y1="8" y2="8"/>
                     </svg>
                     <div>
-                        {{ $event['info'] }}
+                        {{ $event['info'] ?? 'N/A' }}
                     </div>
                 </div>
             </div>
