@@ -1,5 +1,4 @@
 @php
-    $headers = ['Name', 'Date'];
     $updatable_cols = ['Name' => 'name',
         'Date' => 'date',
         'Time' => 'time',
@@ -46,9 +45,6 @@
 <div class="min-h-screen bg-slate-800 flex justify-center font['Montserrat']">
     <div class="flex flex-col justify-around text-center text-slate-100
         py-4 w-[90%] gap-4 max-h-screen">
-@foreach($events as $event)
-<div>{{ $event }}</div>
-@endforeach
         <div class="font-extrabold text-2xl flex flex-row justify-center">
             Manage Events
         </div>
@@ -105,7 +101,8 @@
                 @foreach($events as $event)
                 <tr class="hover:bg-slate-700 odd:bg-slate-900
                     even:bg-slate-800">
-                    <td class="sticky z-10 left-0 border-b-2 border-slate-500 align-middle bg-inherit">
+                    <td class="sticky z-10 left-0 border-b-2 border-slate-500
+                        align-middle bg-inherit">
                         <div class="w-full h-full bg-inherit">
                             <input type="checkbox"
                                 value="{{ $event['id'] }}"
@@ -116,7 +113,7 @@
                     @foreach($form_inputs as $form_input)
                     <td class="border-b-2 border-slate-500 px-1 py-2">
                         <div>
-                        {{ $event[$form_input['input_name']] }}
+                            {{ $event[$form_input['input_name']] }}
                         </div>
                     </td>
                     @endforeach
@@ -167,8 +164,7 @@
             </table>
         </div>
         @if($is_delete_event_open)
-        <div wire:transition
-            class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
+        <div class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
             z-40 flex justify-center items-center">
             <div class="opacity-100 rounded-xl h-auto w-[95%]
                 bg-slate-800 shadow-2xl p-4 flex flex-col items-center
@@ -220,8 +216,7 @@
         </div>
         @endif
         @if($is_update_event_open)
-        <div wire:transition
-            class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
+        <div class="absolute top-0 left-0 w-full h-full bg-opacity-30 bg-white
             z-40 flex justify-center items-center">
             <div class="opacity-100 rounded-xl h-auto max-h-[90%] w-[95%]
                 bg-slate-800 shadow-2xl p-4 flex flex-col items-center
@@ -269,8 +264,8 @@
                         </div>
                         @else
                         <div wire:transition
-                            class="text-blue-500">
-                            No changes&nbsp;
+                            class="text-green-500">
+                            &nbsp;
                         </div>
                         @endif
                         <div class="flex flex-col sm:flex-row items-center

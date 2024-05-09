@@ -19,7 +19,7 @@ class Admin extends Component
 
     public function mount(): void
     {
-        $this->events = EventModel::all();
+        $this->fetch_events();
     }
 
     public function check_select_all(): void
@@ -127,7 +127,7 @@ class Admin extends Component
         if(count($this->selected_events_ids) > 0)
         {
             $this->events_before_changes = EventModel::whereIn('id',
-                                        $this->selected_events_ids)
+                                                $this->selected_events_ids)
                                                 ->get()
                                                 ->pluck(null, 'id')
                                                 ->toArray();
@@ -139,9 +139,8 @@ class Admin extends Component
     {
         EventModel::destroy($this->selected_events_ids);
         $this->fetch_events();
-        $this->check_select_all();
-        $this->selected_events_ids = [];
-        $this->is_delete_event_open = false;
+        $this->select_all_checkbox = false;
+        $this->close_delete_event();
     }
 
     public function close_delete_event(): void
